@@ -1,0 +1,36 @@
+<script>
+var lastit=0;
+function getnotification(id,last,userid) {
+	if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    } else {  // code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            tr=JSON.parse(xmlhttp.responseText)
+            if(tr.success==true)
+            {tr.messages.reverse();
+		console.log(lastit)		
+		if(lastit!=tr.last)
+		{htm=""
+                for (index = 0; index < tr.messages.length; ++index) {
+   		 htm=htm+tr.messages[index]+"<br>";
+		document.getElementById(id).innerHTML=htm+document.getElementById(id).innerHTML;
+		lastit=tr.last;
+		}
+		}
+             }
+        }
+    }
+  xmlhttp.open("GET","notify.php?userid="+userid+"&last="+last);
+  xmlhttp.send();
+}
+
+
+setInterval(function(){getnotification("notification",1,1)},10000);
+
+</script>
+<div id="notification">asd
+</div>
